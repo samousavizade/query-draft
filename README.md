@@ -10,6 +10,45 @@ A lightweight, production-minded stack for **NL-to-SQL** analytics with **RAG ov
 
 ---
 
+# Quick Start
+
+```bash
+docker compose up -d
+```
+
+### Generate Sample Records and Ingest Schema Documents
+
+```bash
+# 1) generate database records
+docker compose exec backend python -m database_data_generation.db_seed
+-- Seeded 300 customers, 200 products, 2500 orders in PostgreSQL.
+
+# 2) ingest schema into vector database 
+docker compose exec backend python -m document_ingestion.ingest_schema
+-- Indexed 3 schema docs into 'DDL' from '../document_ingestion/documents.json'
+```
+
+```
+-- Qdrant Dashboard
+http://localhost:16333/dashboard#/collections
+```
+
+### API Call
+
+```
+curl -X POST localhost:8501/agent/query \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"Top 10 customers by order count in last month"}'
+```
+
+### GUI
+
+```
+localhost:8502
+```
+
+---
+
 ## 1) Architecture
 
 ```
@@ -130,7 +169,7 @@ Returns Ollama host/model and a simple “Ok” status.
 * `generate_sql_query` — assemble strict prompt + context; call Ollama; return `sql`.
 * `validate_sql_query` — quick guards (e.g., only retrieved tables referenced); optional EXPLAIN.
     - This module is responsible for validating SQL queries to ensure they adhere to security and business rules.
-    It checks for forbidden keywords, ensures only allowed tables are referenced, and enforces a maximum row limit.
+      It checks for forbidden keywords, ensures only allowed tables are referenced, and enforces a maximum row limit.
 * `execute_sql_query` — run on Postgres; return `rows`.
 
 **Error path**: any node can put `error` in state → goes to `error` node and finishes.
@@ -144,41 +183,3 @@ Returns Ollama host/model and a simple “Ok” status.
 * Results table
 * Basic error banner (e.g., “Missing schema for X” or DB errors)
 
----
-
-# Quick Start
-
-```bash
-docker compose up -d
-```
-
-### First run
-
-```bash
-# 1) generate database records
-docker compose exec backend python -m database_data_generation.db_seed
--- Seeded 300 customers, 200 products, 2500 orders in PostgreSQL.
-
-# 2) ingest schema into vector database 
-docker compose exec backend python -m document_ingestion.ingest_schema
--- Indexed 3 schema docs into 'DDL' from '../document_ingestion/documents.json'
-```
-
-```
--- Qdrant Dashboard
-http://localhost:16333/dashboard#/collections
-```
-
-### API Call
-
-```
-curl -X POST localhost:8501/agent/query \
-  -H 'Content-Type: application/json' \
-  -d '{"question":"Top 10 customers by order count in last month"}'
-```
-
-### GUI
-
-```
-localhost:8502
-```
