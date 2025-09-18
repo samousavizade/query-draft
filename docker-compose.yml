@@ -1,0 +1,88 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - API_BASE_URL=${API_BASE_URL}
+    depends_on:
+      - backend
+    networks:
+      - appnet
+    volumes:
+      - ./frontend:/app
+
+  backend:
+    build:
+      context: ./backend
+    container_name: back
+    restart: always
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - QDRANT_URL=${QDRANT_URL}
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - QDRANT_COLLECTION=${QDRANT_COLLECTION}
+      - DATABASE_URL=${DATABASE_URL}
+      - OLLAMA_HOST=${OLLAMA_HOST}
+      - OLLAMA_MODEL=${OLLAMA_MODEL}
+      - SQL_MAX_LIMIT=${SQL_MAX_LIMIT}
+    depends_on:
+      - db
+      - ollama
+      - qdrant
+    networks:
+      - appnet
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    ports:
+      - "${PG_PORT}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - appnet
+
+  ollama:
+    build:
+      context: ./ollama
+    container_name: ollama_llm
+    restart: always
+    ports:
+      - "${OLLAMA_PORT}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - appnet
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: unless-stopped
+    ports:
+      - "${QDRANT_HTTP_PORT}:6333"
+      - "${QDRANT_GRPC_PORT}:6334"
+    environment:
+      QDRANT__SERVICE__API_KEY: "${QDRANT_API_KEY}"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - appnet
+
+volumes:
+  db_data:
+  ollama_data:
+  qdrant_data:
+
+networks:
+  appnet:
+    driver: bridge

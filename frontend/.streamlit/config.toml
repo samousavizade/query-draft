@@ -1,0 +1,8 @@
+# .streamlit/config.toml
+[theme]
+base = "dark"
+primaryColor = "#FFD700"                # Gold
+backgroundColor = "#0E1117"             # App background
+secondaryBackgroundColor = "#161B22"    # Sidebar / cards
+textColor = "#E6E6E6"
+font = "sans serif"

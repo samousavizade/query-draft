@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+async-exit-stack
+async-generator
+httpx
+sqlparse
+langgraph
+psycopg2-binary
+qdrant-client
+fastembed
+faker

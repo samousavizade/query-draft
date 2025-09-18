@@ -1,0 +1,15 @@
+FROM ollama/ollama:latest
+
+COPY entrypoint.sh /entrypoint.sh
+
+ENV OLLAMA_NUM_THREADS=1
+ENV OLLAMA_NUM_PARALLEL=1
+ENV OLLAMA_NO_MMAP=1
+ENV OLLAMA_KEEP_ALIVE=24h
+ENV OLLAMA_BATCH_SIZE=1
+ENV OLLAMA_FLASH_ATTENTION=1
+
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 11434
+ENTRYPOINT ["/entrypoint.sh"]
