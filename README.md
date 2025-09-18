@@ -1,3 +1,5 @@
+![UI](UI.png)
+
 # QueryDraft Engine
 
 A lightweight, production-minded stack for **NL-to-SQL** analytics with **RAG over your database schema**.
