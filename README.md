@@ -12,11 +12,7 @@ A lightweight, production-minded stack for **NL-to-SQL** analytics with **RAG ov
 
 # Quick Start
 
-```bash
-docker compose up -d
-```
-
-### Generate Sample Records and Ingest Schema Documents
+### (First Time) Generate Sample Records and Ingest Schema Documents
 
 ```bash
 # 1) generate database records
@@ -26,6 +22,10 @@ docker compose exec backend python -m database_data_generation.db_seed
 # 2) ingest schema into vector database 
 docker compose exec backend python -m document_ingestion.ingest_schema
 -- Indexed 3 schema docs into 'DDL' from '../document_ingestion/documents.json'
+```
+
+```bash
+docker compose up -d --build
 ```
 
 ```

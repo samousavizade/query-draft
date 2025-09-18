@@ -63,13 +63,13 @@ def assemble_prompt(question: str, context_chunks: list[str], tables_in_scope: l
     prompt = f"""
 ## Task
 Generate a SQL query to answer the following question:
-`{question}`
+{question}
 
 ### Database Schema
 This query will run on a database whose schema is represented in this string:
 {ctx}        
 ### SQL
-Given the database schema, here is the SQL query that answers `{question}`:
+Given the database schema, here is the SQL query that answers {question}:
 ```sql
     """.strip()
 

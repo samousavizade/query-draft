@@ -1,18 +1,18 @@
 [
   {
-    "document": "CREATE TABLE mydb.public.orders (\n    id SERIAL PRIMARY KEY,\n    customer_id INTEGER NOT NULL REFERENCES customers,\n    product_id  INTEGER NOT NULL REFERENCES products,\n    order_date  TIMESTAMP NOT NULL,\n    quantity    INTEGER NOT NULL,\n    status      ORDERSTATUS NOT NULL\n);\n-- customers.id can be joined with orders.customer_id\n-- products.id can be joined with orders.product_id\nCREATE TYPE ORDERSTATUS AS ENUM ('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED');\n",
+    "document": "CREATE TABLE mydb.public.orders (\n    id SERIAL PRIMARY KEY, -- Unique ID for each order\n    customer_id INTEGER NOT NULL REFERENCES customers, -- ID of customer who made order\n    product_id  INTEGER NOT NULL REFERENCES products, -- ID of product ordered\n    order_date  TIMESTAMP NOT NULL, -- Date of order\n    quantity    INTEGER NOT NULL, -- Quantity of product ordered\n    status      ORDERSTATUS NOT NULL -- Order status ('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED') \n);\n-- customers.id can be joined with orders.customer_id\n-- products.id can be joined with orders.product_id\nCREATE TYPE ORDERSTATUS AS ENUM ('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED');\n",
     "metadata": {
       "table": "orders"
     }
   },
   {
-    "document": "CREATE TABLE mydb.public.customers (\n    id SERIAL PRIMARY KEY,\n    name VARCHAR(100) NOT NULL,\n    email VARCHAR(150) NOT NULL UNIQUE,\n    registration_date TIMESTAMP NOT NULL\n);\n-- customers.id can be joined with orders.customer_id\n",
+    "document": "CREATE TABLE mydb.public.customers (\n    id SERIAL PRIMARY KEY, -- Unique ID for each customer\n    name VARCHAR(100) NOT NULL, -- Name of the customer\n    email VARCHAR(150) NOT NULL UNIQUE, -- Email of the customer\n    registration_date TIMESTAMP NOT NULL -- Registration date of the customer\n);\n-- customers.id can be joined with orders.customer_id\n",
     "metadata": {
       "table": "customers"
     }
   },
   {
-    "document": "CREATE TABLE products (\n    id SERIAL PRIMARY KEY,\n    name VARCHAR(100) NOT NULL,\n    category VARCHAR(100) NOT NULL,\n    price DOUBLE PRECISION NOT NULL\n);\n-- products.id can be joined with orders.product_id\n",
+    "document": "CREATE TABLE products (\n    id SERIAL PRIMARY KEY, -- Unique ID for each product\n    name VARCHAR(100) NOT NULL, -- Name of the product\n    category VARCHAR(100) NOT NULL, -- Category of the product\n    price DOUBLE PRECISION NOT NULL -- Price of each unit of the product\n);\n-- products.id can be joined with orders.product_id\n",
     "metadata": {
       "table": "products"
     }
